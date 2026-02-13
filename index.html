@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeOverlap Pro | V24 Ultimate UX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Colors & Theme Variables (Refined) --- */
+        :root {
+            --primary: #4f46e5; /* Deeper Indigo for better contrast */
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --accent: #06b6d4; /* Sharper Cyan */
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --success: #10b981;
+            --danger: #f43f5e;
+            --bg: #020617; /* Darker Slate/Black */
+            --card-bg: rgba(30, 41, 59, 0.65); /* More transparency for glass effect */
+            --panel-bg: rgba(15, 23, 42, 0.95);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --highlight-bg: rgba(79, 70, 229, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --panel-bg: rgba(255, 255, 255, 0.98);
+            --border: rgba(0, 0, 0, 0.08);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --highlight-bg: rgba(79, 70, 229, 0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg); color: var(--text-main);
+            min-height: 100vh; display: flex; flex-direction: column;
+            transition: background 0.3s ease; overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        header {
+            height: 80px; padding: 0 5%; background: var(--card-bg);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+            display: grid; grid-template-columns: 250px 1fr 350px; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        /* NEW LOGO FONT */
+        .brand { 
+            font-family: 'Outfit', sans-serif; 
+            font-weight: 900; 
+            font-size: 1.4rem; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            letter-spacing: -0.5px;
+        }
+        .brand span { color: var(--primary); }
+        
+        .nav-links { display: flex; justify-content: center; gap: 20px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; transition: 0.2s; cursor: pointer; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .header-tools { display: flex; justify-content: flex-end; gap: 10px; }
+        .tool-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text-main); padding: 8px 12px; border-radius: 8px; cursor: pointer;
+            font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;
+            transition: 0.2s;
+        }
+        .tool-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
+
+        /* --- Layout --- */
+        .container { max-width: 1250px; margin: 30px auto; width: 95%; display: grid; grid-template-columns: 1fr 320px; gap: 30px; }
+
+        .main-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px;
+            padding: 40px; text-align: center; position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Clock */
+        .clock-val { font-family: 'JetBrains Mono', monospace; font-size: 5rem; font-weight: 700; line-height: 1; letter-spacing: -3px; }
+        .clock-sec { font-size: 2rem; color: var(--primary); }
+        .clock-ampm { font-size: 1.2rem; color: var(--accent); margin-left: 10px; font-weight: 800; }
+
+        /* Sun/Moon Icon */
+        .track-container { width: 100%; height: 20px; margin: 20px 0; position: relative; }
+        #skyIcon { position: absolute; top: 0; font-size: 24px; transition: left 0.1s linear; filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
+
+        /* Inputs */
+        .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        input[type=text], input[type=number], select { 
+            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); 
+            border: 1px solid var(--border); border-radius: 12px; 
+            color: var(--text-main); font-size: 1rem; font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: 0.2s;
+        }
+        input:focus { border-color: var(--primary); background: rgba(0,0,0,0.3); }
+
+        /* Slider */
+        .slider-wrapper { position: relative; height: 60px; margin: 30px 0; border-radius: 30px; background: #0f172a; overflow: hidden; border: 2px solid var(--border); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        .overlap-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.6; transition: background 0.3s; }
+        .overlap-text { position: absolute; width: 100%; top: 50%; transform: translateY(-50%); z-index: 2; font-size: 0.75rem; font-weight: 800; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); pointer-events: none; letter-spacing: 1px; }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; height: 100%; background: transparent; position: relative; z-index: 3; cursor: grab; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 60px; width: 4px; background: #fff; box-shadow: 0 0 15px white; border-radius: 2px; }
+        input[type=range]:active { cursor: grabbing; }
+
+        /* City Cards */
+        .city-card { display: flex; justify-content: space-between; align-items: center; padding: 25px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px; transition: 0.2s; }
+        .city-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.05); border-color: var(--primary); }
+        .city-card.active { border-left: 5px solid var(--accent); }
+        .biz-badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 6px; font-weight: 800; margin-left: 10px; }
+        .open { background: var(--success); color: #000; }
+        .closed { background: rgba(255,255,255,0.1); color: var(--text-muted); }
+
+        /* --- NEW: MAIN CURRENCY SECTION (V24) --- */
+        .currency-hero {
+            margin-top: 40px; padding: 30px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--border); border-radius: 24px;
+            position: relative; overflow: hidden;
+        }
+        /* Subtle Glow Effect */
+        .currency-hero::before {
+            content:''; position: absolute; top:-50%; left:-50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, var(--highlight-bg) 0%, transparent 60%); pointer-events: none;
+        }
+        
+        .curr-hero-grid {
+            display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; gap: 20px; position: relative; z-index: 2;
+        }
+        .curr-input-group { text-align: left; }
+        .curr-input-group label { color: var(--primary); margin-bottom: 8px; }
+        
+        .curr-big-input {
+            width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
+            font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--text-main);
+            padding: 10px 0; transition: 0.3s;
+        }
+        .curr-big-input:focus { border-color: var(--primary); outline: none; }
+        
+        .curr-arrow {
+            width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.2rem;
+            margin: 0 auto;
+        }
+        .curr-result-display {
+            font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--success);
+            padding: 10px 0; border-bottom: 2px solid transparent; display: block;
+        }
+
+        /* --- GLOBAL DASHBOARD GRID --- */
+        .dashboard-section { margin-top: 40px; }
+        .dash-title { text-align: left; font-size: 0.85rem; color: var(--text-muted); font-weight: 800; letter-spacing: 1.5px; margin-bottom: 20px; font-family: 'Outfit'; }
+        
+        .global-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .mini-card {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 20px; border-radius: 16px; text-align: left;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: 0.3s; cursor: default;
+        }
+        .mini-card:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); transform: translateY(-3px); }
+        .mini-head { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); display: flex; justify-content: space-between; }
+        .mini-time { font-family: 'JetBrains Mono'; font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-top: 10px; }
+        .mini-status { font-size: 0.6rem; font-weight: 800; display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+        .st-active { background: var(--success); box-shadow: 0 0 10px var(--success); }
+        .st-sleep { background: var(--danger); opacity: 0.5; }
+
+        /* Ads */
+        .ad-space { background: rgba(0,0,0,0.1); border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; overflow: hidden; }
+
+        /* --- TOOLS SIDEBAR --- */
+        .tools-sidebar {
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+            background: var(--panel-bg); backdrop-filter: blur(30px);
+            border-left: 1px solid var(--border); z-index: 2000;
+            padding: 30px; box-shadow: -10px 0 50px rgba(0,0,0,0.5);
+            transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow-y: auto;
+        }
+        .tools-sidebar.active { right: 0; }
+        
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .panel-title { font-size: 1.5rem; font-weight: 800; font-family: 'Outfit'; color: var(--primary); }
+        .close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        
+        .tool-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .tool-head { font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--accent); }
+        
+        .action-btn {
+            width: 100%; padding: 12px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
+            margin-top: 10px; transition: 0.2s; font-size: 0.9rem;
+        }
+        .action-btn:hover { background: #4338ca; box-shadow: 0 5px 15px var(--primary-glow); }
+        
+        .output-box {
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
+            margin-top: 10px; border: 1px solid var(--border); word-break: break-all;
+            white-space: pre-line;
+        }
+
+        .currency-box {
+            background: var(--highlight-bg); border: 1px solid var(--primary);
+            padding: 15px; border-radius: 12px;
+        }
+        .curr-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .curr-tag { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            z-index: 1999; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .overlay.active { opacity: 1; pointer-events: all; }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .global-dashboard { grid-template-columns: repeat(2, 1fr); }
+            aside { display: none; }
+            .curr-big-input, .curr-result-display { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div class="overlay" onclick="toggleTools()" id="overlay"></div>
+
+<aside class="tools-sidebar" id="toolsSidebar">
+    <div class="panel-header">
+        <div class="panel-title">🛠️ TOOLS</div>
+        <button class="close-btn" onclick="toggleTools()">×</button>
+    </div>
+
+    <div class="tool-section">
+        <div class="tool-head">📅 Meeting Invite Gen</div>
+        <label>Meeting Title</label>
+        <input type="text" id="meetTitle" placeholder="e.g. Q4 Strategy Call">
+        <button id="btnInvite" class="action-btn" onclick="generateInvite()">✨ Copy Invite Text</button>
+        <div class="output-box" id="inviteOutput" style="display:none;"></div>
+    </div>
+
+    <div class="tool-section currency-box">
+        <div class="tool-head" style="color:var(--text-main); margin-bottom:10px;">💱 Quick Converter</div>
+        <div class="curr-row">
+            <div><span class="curr-tag" id="currNameSidebar1">ORIGIN</span><input type="number" id="currAmountSidebar" value="100" oninput="convertSidebarCurrency()" style="margin-top:5px; padding:8px;"></div>
+            <div style="font-size:1.5rem; margin:0 10px;">➔</div>
+            <div style="text-align:right;"><span class="curr-tag" id="currNameSidebar2">TARGET</span><div id="currResultSidebar" style="margin-top:10px; font-size:1.2rem; font-weight:800; color:var(--success);">0.00</div></div>
+        </div>
+    </div>
+
+    <div class="tool-section" style="border:none;">
+        <div class="tool-head">🎨 Widget Customizer</div>
+        <label>Theme</label>
+        <select id="widgetTheme"><option value="dark">Dark Mode 🌙</option><option value="light">Light Mode ☀️</option></select>
+        <label style="margin-top:10px;">Width (px)</label>
+        <input type="number" id="widgetWidth" value="350">
+        <button id="btnWidget" class="action-btn" onclick="generateWidgetCode()">🔌 Copy Embed Code</button>
+        <div class="output-box" id="widgetOutput" style="display:none; color:var(--accent);"></div>
+    </div>
+</aside>
+
+<header>
+    <a href="#" class="brand">TIMEOVERLAP<span>PRO</span></a>
+    <ul class="nav-links">
+        <li><a href="#" onclick="toggleTools()">Tools & Widgets</a></li>
+    </ul>
+    <div class="header-tools">
+        <button class="tool-btn" onclick="toggleTheme()" id="themeBtn">☀️ LIGHT</button>
+        <button class="tool-btn" onclick="toggleFormat()">12H/24H</button>
+        <button class="tool-btn" onclick="toggleTools()">⚙️ TOOLS</button>
+    </div>
+</header>
+
+<div class="container">
+    <main>
+        <div class="ad-space" style="height: 90px; margin-bottom: 25px;"><span style="font-family:'JetBrains Mono'">[AdSense Leaderboard 728x90]</span></div>
+
+        <div class="main-card">
+            <div id="statusTag" style="font-size: 0.7rem; color: var(--success); font-weight: 800; margin-bottom: 10px;">● LIVE SYNC ACTIVE</div>
+            <div class="clock-val"><span id="hhmm">12:00</span><span class="clock-sec" id="ss">:00</span><span class="clock-ampm" id="ampm">PM</span></div>
+            <button onclick="goLive()" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.8rem; font-weight:bold; margin-bottom:10px;">↺ RESET TO NOW</button>
+            <div class="track-container"><div id="skyIcon">☀️</div></div>
+
+            <div class="search-grid">
+                <div><label>YOUR CITY</label><input type="text" id="originInp" list="cityList" oninput="handleSearch()" placeholder="Type to search..."></div>
+                <div><label>TARGET CITY</label><input type="text" id="targetInp" list="cityList" oninput="handleSearch()" placeholder="Type to search..."></div>
+            </div>
+            <datalist id="cityList"></datalist>
+
+            <div class="slider-wrapper">
+                <div id="overlapLayer" class="overlap-layer"></div>
+                <div id="overlapText" class="overlap-text">MEETING WINDOW: CALCULATING...</div>
+                <input type="range" id="mainSlider" min="0" max="1439" value="720">
+            </div>
+
+            <div id="results">
+                <div id="card1" class="city-card active"></div>
+                <div id="card2" class="city-card active"></div>
+            </div>
+
+            <div class="currency-hero">
+                <div style="font-size:0.8rem; color:var(--text-muted); font-weight:800; margin-bottom:15px; letter-spacing:1px;">REAL-TIME CURRENCY EXCHANGE</div>
+                <div class="curr-hero-grid">
+                    <div class="curr-input-group">
+                        <label id="currMainLabel1">USD (United States)</label>
+                        <input type="number" id="currMainAmount" class="curr-big-input" value="100" oninput="convertMainCurrency()">
+                    </div>
+                    <div class="curr-arrow">➔</div>
+                    <div class="curr-input-group" style="text-align:right;">
+                        <label id="currMainLabel2">GBP (United Kingdom)</label>
+                        <span id="currMainResult" class="curr-result-display">79.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="dash-title">GLOBAL COMMAND CENTER</div>
+                <div class="global-dashboard" id="globalGrid">
+                    </div>
+            </div>
+
+        </div>
+        <div class="ad-space" style="height: 250px; margin-top: 30px;"><span style="font-family:'JetBrains Mono'">[AdSense Square 250x250]</span></div>
+    </main>
+    <aside><div class="ad-space" style="height: 600px; position: sticky; top: 100px;"><span style="font-family:'JetBrains Mono'">[AdSense Vertical 300x600]</span></div></aside>
+</div>
+
+<script>
+    // --- DATABASE ---
+    const cities = [
+        { name: "Algiers", flag: "🇩🇿", offset: 1, curr: "DZD", rate: 134.5 },
+        { name: "Riyadh", flag: "🇸🇦", offset: 3, curr: "SAR", rate: 3.75 },
+        { name: "Dubai", flag: "🇦🇪", offset: 4, curr: "AED", rate: 3.67 },
+        { name: "Cairo", flag: "🇪🇬", offset: 2, curr: "EGP", rate: 30.9 },
+        { name: "Casablanca", flag: "🇲🇦", offset: 1, curr: "MAD", rate: 10.1 },
+        { name: "Amman", flag: "🇯🇴", offset: 3, curr: "JOD", rate: 0.71 },
+        { name: "Kuwait City", flag: "🇰🇼", offset: 3, curr: "KWD", rate: 0.31 },
+        { name: "Doha", flag: "🇶🇦", offset: 3, curr: "QAR", rate: 3.64 },
+        { name: "Muscat", flag: "🇴🇲", offset: 4, curr: "OMR", rate: 0.38 },
+        { name: "Tunis", flag: "🇹🇳", offset: 1, curr: "TND", rate: 3.10 },
+        { name: "Istanbul", flag: "🇹🇷", offset: 3, curr: "TRY", rate: 27.5 },
+        { name: "New York", flag: "🇺🇸", offset: -5, curr: "USD", rate: 1.0 },
+        { name: "Los Angeles", flag: "🇺🇸", offset: -8, curr: "USD", rate: 1.0 },
+        { name: "Chicago", flag: "🇺🇸", offset: -6, curr: "USD", rate: 1.0 },
+        { name: "Toronto", flag: "🇨🇦", offset: -5, curr: "CAD", rate: 1.35 },
+        { name: "London", flag: "🇬🇧", offset: 0, curr: "GBP", rate: 0.79 },
+        { name: "Paris", flag: "🇫🇷", offset: 1, curr: "EUR", rate: 0.93 },
+        { name: "Berlin", flag: "🇩🇪", offset: 1, curr: "EUR", rate: 0.93 },
+        { name: "Moscow", flag: "🇷🇺", offset: 3, curr: "RUB", rate: 96.0 },
+        { name: "Tokyo", flag: "🇯🇵", offset: 9, curr: "JPY", rate: 147.0 },
+        { name: "Beijing", flag: "🇨🇳", offset: 8, curr: "CNY", rate: 7.29 },
+        { name: "Mumbai", flag: "🇮🇳", offset: 5.5, curr: "INR", rate: 83.0 },
+        { name: "Sydney", flag: "🇦🇺", offset: 11, curr: "AUD", rate: 1.55 }
+    ];
+
+    const dashboardCities = ["New York", "London", "Berlin", "Dubai", "Tokyo", "Sydney"];
+
+    let isLive = true, is24H = false, timer, originIdx = 0, targetIdx = 1;
+    const WORK_S = 9, WORK_E = 17;
+
+    const el = {
+        slider: document.getElementById('mainSlider'),
+        hhmm: document.getElementById('hhmm'), ss: document.getElementById('ss'), ampm: document.getElementById('ampm'),
+        layer: document.getElementById('overlapLayer'), overlapTxt: document.getElementById('overlapText'),
+        sky: document.getElementById('skyIcon'),
+        originInp: document.getElementById('originInp'), targetInp: document.getElementById('targetInp'),
+        card1: document.getElementById('card1'), card2: document.getElementById('card2'),
+        status: document.getElementById('statusTag'),
+        grid: document.getElementById('globalGrid')
+    };
+
+    function init() {
+        const datalist = document.getElementById('cityList');
+        cities.sort((a,b) => a.name.localeCompare(b.name));
+        cities.forEach(c => {
+            let o = document.createElement('option'); o.value = c.name; o.innerText = `${c.flag}`; datalist.appendChild(o);
+        });
+
+        originIdx = cities.findIndex(c => c.name === "New York") || 0;
+        targetIdx = cities.findIndex(c => c.name === "London") || 1;
+        if(originIdx === -1) originIdx = 0; if(targetIdx === -1) targetIdx = 1;
+
+        el.originInp.value = cities[originIdx].name;
+        el.targetInp.value = cities[targetIdx].name;
+        
+        el.slider.addEventListener('input', () => { isLive = false; el.status.innerText = "● MANUAL MODE"; el.status.style.color = "var(--accent)"; updateUI(); });
+        
+        goLive();
+        updateAllCurrencyUI(); // Init currency labels
+    }
+
+    // --- Core UI Functions ---
+    function toggleTheme() {
+        const b = document.body; const isDark = b.getAttribute('data-theme') === 'dark';
+        b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        document.getElementById('themeBtn').innerText = isDark ? '🌙 DARK' : '☀️ LIGHT';
+    }
+    function toggleFormat() { is24H = !is24H; updateUI(); }
+    function handleSearch() {
+        const o = cities.findIndex(c => c.name === el.originInp.value);
+        const t = cities.findIndex(c => c.name === el.targetInp.value);
+        if(o !== -1) originIdx = o; if(t !== -1) targetIdx = t;
+        if(o !== -1 || t !== -1) { updateUI(); updateAllCurrencyUI(); }
+    }
+    function goLive() {
+        isLive = true; el.status.innerText = "● LIVE SYNC ACTIVE"; el.status.style.color = "var(--success)";
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(!isLive) return;
+            const now = new Date(); const utc = (now.getUTCHours() * 60) + now.getUTCMinutes();
+            let localMins = utc + (cities[originIdx].offset * 60);
+            while(localMins >= 1440) localMins -= 1440; while(localMins < 0) localMins += 1440;
+            el.slider.value = localMins; updateUI(true);
+        }, 1000);
+        updateUI(true);
+    }
+    function updateUI(live = false) {
+        let val = parseInt(el.slider.value); while(val >= 1440) val -= 1440; while(val < 0) val += 1440;
+        const o = cities[originIdx], t = cities[targetIdx];
+        const time = formatTime(val);
+        el.hhmm.innerText = time.hm; el.ampm.innerText = is24H ? "" : time.ap;
+        el.ss.innerText = live ? ":" + new Date().getSeconds().toString().padStart(2, '0') : ":00";
+        el.sky.style.left = `calc(${(val/1440)*100}% - 12px)`; el.sky.innerText = (val > 360 && val < 1080) ? "☀️" : "🌙";
+        
+        let stops = [], startH = -1, endH = -1;
+        for(let h=0; h<24; h++) {
+            let tH = h - o.offset + t.offset; if(tH >= 24) tH -= 24; if(tH < 0) tH += 24;
+            const overlap = (h >= WORK_S && h < WORK_E) && (Math.floor(tH) >= WORK_S && Math.floor(tH) < WORK_E);
+            if(overlap) { if(startH === -1) startH = h; endH = h + 1; }
+            stops.push(`${overlap ? 'var(--success)' : 'transparent'} ${(h/24)*100}% ${((h+1)/24)*100}%`);
+        }
+        el.layer.style.background = `linear-gradient(to right, ${stops.join(', ')})`;
+        el.overlapTxt.innerText = startH !== -1 ? `MEETING WINDOW: ${startH}:00 - ${endH}:00` : "NO OVERLAP FOUND";
+        renderCard(el.card1, o, val);
+        let tVal = val - (o.offset * 60) + (t.offset * 60); while(tVal >= 1440) tVal -= 1440; while(tVal < 0) tVal += 1440;
+        renderCard(el.card2, t, tVal);
+        updateDashboard(val, o.offset);
+    }
+    function renderCard(card, city, mins) {
+        const t = formatTime(mins), h = Math.floor(mins / 60), open = (h >= WORK_S && h < WORK_E);
+        card.innerHTML = `<div><b>${city.flag} ${city.name}</b></div><div style="text-align:right"><b>${t.hm} ${is24H ? '' : t.ap}</b><br><span class="biz-badge ${open?'open':'closed'}">${open?'OPEN':'CLOSED'}</span></div>`;
+    }
+    function formatTime(m) {
+        let h = Math.floor(m / 60); if(h >= 24) h -= 24; if(h < 0) h += 24;
+        let ap = h >= 12 ? 'PM' : 'AM'; let hF = is24H ? h.toString().padStart(2, '0') : (h % 12 || 12);
+        return { hm: `${hF}:${(m % 60).toString().padStart(2, '0')}`, ap };
+    }
+
+    function updateDashboard(currentMins, originOffset) {
+        el.grid.innerHTML = "";
+        dashboardCities.forEach(cityName => {
+            const city = cities.find(c => c.name === cityName);
+            if(!city) return;
+            let diff = city.offset - originOffset;
+            let cityMins = currentMins + (diff * 60);
+            while(cityMins >= 1440) cityMins -= 1440; while(cityMins < 0) cityMins += 1440;
+            const t = formatTime(cityMins); const h = Math.floor(cityMins / 60);
+            const isActive = (h >= 9 && h < 17);
+            const div = document.createElement('div');
+            div.className = 'mini-card';
+            div.innerHTML = `<div class="mini-head"><span>${city.flag} ${city.name}</span><span class="mini-status ${isActive ? 'st-active' : 'st-sleep'}"></span></div><div class="mini-time">${t.hm} <span style="font-size:0.7rem">${is24H ? '' : t.ap}</span></div>`;
+            el.grid.appendChild(div);
+        });
+    }
+
+    // --- CURRENCY LOGIC (Dual Sync) ---
+    function updateAllCurrencyUI() {
+        const c1 = cities[originIdx], c2 = cities[targetIdx];
+        
+        // Update Main Labels
+        document.getElementById('currMainLabel1').innerText = `${c1.curr} (${c1.name})`;
+        document.getElementById('currMainLabel2').innerText = `${c2.curr} (${c2.name})`;
+        
+        // Update Sidebar Labels
+        document.getElementById('currNameSidebar1').innerText = c1.curr;
+        document.getElementById('currNameSidebar2').innerText = c2.curr;
+        
+        // Trigger both calculations
+        convertMainCurrency();
+        convertSidebarCurrency();
+    }
+
+    function convertMainCurrency() {
+        const amt = parseFloat(document.getElementById('currMainAmount').value) || 0;
+        const c1 = cities[originIdx], c2 = cities[targetIdx];
+        let res = (amt / c1.rate) * c2.rate;
+        document.getElementById('currMainResult').innerText = res > 1000 ? res.toFixed(0) : res.toFixed(2);
+    }
+
+    function convertSidebarCurrency() {
+        const amt = parseFloat(document.getElementById('currAmountSidebar').value) || 0;
+        const c1 = cities[originIdx], c2 = cities[targetIdx];
+        let res = (amt / c1.rate) * c2.rate;
+        document.getElementById('currResultSidebar').innerText = res > 1000 ? res.toFixed(0) : res.toFixed(2);
+    }
+
+    // --- TOOLS ---
+    function toggleTools() { document.getElementById('toolsSidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+    function generateInvite() {
+        const title = document.getElementById('meetTitle').value || "Meeting";
+        const c1 = cities[originIdx], c2 = cities[targetIdx];
+        let val = parseInt(el.slider.value);
+        let t1 = formatTime(val); 
+        let diff = c2.offset - c1.offset; let val2 = val + (diff * 60);
+        while(val2 >= 1440) val2 -= 1440; while(val2 < 0) val2 += 1440;
+        let t2 = formatTime(val2);
+        const txt = `📅 *${title}*\n⏰ ${c1.name}: ${t1.hm} ${t1.ap}\n⏰ ${c2.name}: ${t2.hm} ${t2.ap}\n🔗 TimeOverlap Pro`;
+        document.getElementById('inviteOutput').innerText = txt; document.getElementById('inviteOutput').style.display='block';
+        copyToClipboard(txt, 'btnInvite');
+    }
+    function generateWidgetCode() {
+        const code = `<iframe src="https://timeoverlap.pro/widget" width="350" height="450" style="border:0"></iframe>`;
+        document.getElementById('widgetOutput').innerText = code; document.getElementById('widgetOutput').style.display='block';
+        copyToClipboard(code, 'btnWidget');
+    }
+    function copyToClipboard(text, btnId) {
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById(btnId); const old = btn.innerText;
+            btn.innerText = "✅ Copied!"; btn.style.background = "var(--success)"; btn.style.color="black";
+            setTimeout(() => { btn.innerText = old; btn.style.background="var(--primary)"; btn.style.color="white"; }, 2000);
+        });
+    }
+
+    init();
+</script>
+</body>
+</html>
