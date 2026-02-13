@@ -3,20 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TimeOverlap Pro | V24 Ultimate UX</title>
+    
+    <title>TimeOverlap Pro | Best Meeting Time Planner & Zone Converter</title>
+    <meta name="description" content="Free tool to convert time zones and find the best meeting overlap. Visualize work hours between New York, London, Dubai, Tokyo, and 50+ cities instantly.">
+    <meta name="keywords" content="Time Zone Converter, Meeting Planner, World Clock, EST to GMT, PST to CET, Time Difference Calculator, Remote Team Scheduling, تحويل الوقت, فرق التوقيت, Best Meeting Time">
+    <meta name="author" content="TimeOverlap Pro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://your-username.github.io/time-overlap-pro/" />
+
+    <meta property="og:title" content="TimeOverlap Pro - Smart Meeting Planner">
+    <meta property="og:description" content="Stop guessing time zones! Find the perfect meeting time across multiple cities instantly with our visual slider.">
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TimeOverlap Pro",
+      "url": "https://your-username.github.io/time-overlap-pro/",
+      "applicationCategory": "Productivity",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Colors & Theme Variables (Refined) --- */
+        /* --- Colors & Theme --- */
         :root {
-            --primary: #4f46e5; /* Deeper Indigo for better contrast */
+            --primary: #4f46e5;
             --primary-glow: rgba(79, 70, 229, 0.4);
-            --accent: #06b6d4; /* Sharper Cyan */
-            --accent-glow: rgba(6, 182, 212, 0.4);
+            --accent: #06b6d4;
             --success: #10b981;
             --danger: #f43f5e;
-            --bg: #020617; /* Darker Slate/Black */
-            --card-bg: rgba(30, 41, 59, 0.65); /* More transparency for glass effect */
+            --bg: #020617;
+            --card-bg: rgba(30, 41, 59, 0.65);
             --panel-bg: rgba(15, 23, 42, 0.95);
             --border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
@@ -42,28 +66,18 @@
             transition: background 0.3s ease; overflow-x: hidden;
         }
 
-        /* --- Navbar --- */
+        /* Navbar */
         header {
             height: 80px; padding: 0 5%; background: var(--card-bg);
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
             display: grid; grid-template-columns: 250px 1fr 350px; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        /* NEW LOGO FONT */
-        .brand { 
-            font-family: 'Outfit', sans-serif; 
-            font-weight: 900; 
-            font-size: 1.4rem; 
-            color: var(--text-main); 
-            text-decoration: none; 
-            letter-spacing: -0.5px;
-        }
+        .brand { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.4rem; color: var(--text-main); text-decoration: none; letter-spacing: -0.5px; }
         .brand span { color: var(--primary); }
-        
         .nav-links { display: flex; justify-content: center; gap: 20px; list-style: none; }
         .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; transition: 0.2s; cursor: pointer; }
         .nav-links a:hover { color: var(--primary); }
-
         .header-tools { display: flex; justify-content: flex-end; gap: 10px; }
         .tool-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border);
@@ -73,46 +87,35 @@
         }
         .tool-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
 
-        /* --- Layout --- */
+        /* Layout */
         .container { max-width: 1250px; margin: 30px auto; width: 95%; display: grid; grid-template-columns: 1fr 320px; gap: 30px; }
-
         .main-card {
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px;
             padding: 40px; text-align: center; position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(10px);
         }
 
-        /* Clock */
+        /* Clock & UI */
         .clock-val { font-family: 'JetBrains Mono', monospace; font-size: 5rem; font-weight: 700; line-height: 1; letter-spacing: -3px; }
         .clock-sec { font-size: 2rem; color: var(--primary); }
         .clock-ampm { font-size: 1.2rem; color: var(--accent); margin-left: 10px; font-weight: 800; }
-
-        /* Sun/Moon Icon */
         .track-container { width: 100%; height: 20px; margin: 20px 0; position: relative; }
         #skyIcon { position: absolute; top: 0; font-size: 24px; transition: left 0.1s linear; filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
 
-        /* Inputs */
         .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; text-align: left; }
         label { display: block; margin-bottom: 5px; font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         input[type=text], input[type=number], select { 
-            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); 
-            border: 1px solid var(--border); border-radius: 12px; 
-            color: var(--text-main); font-size: 1rem; font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: 0.2s;
+            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; 
+            color: var(--text-main); font-size: 1rem; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.2s;
         }
         input:focus { border-color: var(--primary); background: rgba(0,0,0,0.3); }
 
-        /* Slider */
         .slider-wrapper { position: relative; height: 60px; margin: 30px 0; border-radius: 30px; background: #0f172a; overflow: hidden; border: 2px solid var(--border); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         .overlap-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.6; transition: background 0.3s; }
         .overlap-text { position: absolute; width: 100%; top: 50%; transform: translateY(-50%); z-index: 2; font-size: 0.75rem; font-weight: 800; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); pointer-events: none; letter-spacing: 1px; }
-        
         input[type=range] { -webkit-appearance: none; width: 100%; height: 100%; background: transparent; position: relative; z-index: 3; cursor: grab; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 60px; width: 4px; background: #fff; box-shadow: 0 0 15px white; border-radius: 2px; }
-        input[type=range]:active { cursor: grabbing; }
 
-        /* City Cards */
         .city-card { display: flex; justify-content: space-between; align-items: center; padding: 25px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px; transition: 0.2s; }
         .city-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.05); border-color: var(--primary); }
         .city-card.active { border-left: 5px solid var(--accent); }
@@ -120,52 +123,30 @@
         .open { background: var(--success); color: #000; }
         .closed { background: rgba(255,255,255,0.1); color: var(--text-muted); }
 
-        /* --- NEW: MAIN CURRENCY SECTION (V24) --- */
+        /* Currency Hero */
         .currency-hero {
             margin-top: 40px; padding: 30px;
             background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--border); border-radius: 24px;
-            position: relative; overflow: hidden;
+            border: 1px solid var(--border); border-radius: 24px; position: relative; overflow: hidden;
         }
-        /* Subtle Glow Effect */
-        .currency-hero::before {
-            content:''; position: absolute; top:-50%; left:-50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, var(--highlight-bg) 0%, transparent 60%); pointer-events: none;
-        }
-        
-        .curr-hero-grid {
-            display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; gap: 20px; position: relative; z-index: 2;
-        }
-        .curr-input-group { text-align: left; }
-        .curr-input-group label { color: var(--primary); margin-bottom: 8px; }
-        
+        .currency-hero::before { content:''; position: absolute; top:-50%; left:-50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--highlight-bg) 0%, transparent 60%); pointer-events: none; }
+        .curr-hero-grid { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; gap: 20px; position: relative; z-index: 2; }
+        .curr-input-group label { color: var(--primary); margin-bottom: 8px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; }
         .curr-big-input {
             width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
-            font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--text-main);
-            padding: 10px 0; transition: 0.3s;
+            font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--text-main); padding: 10px 0; transition: 0.3s;
         }
         .curr-big-input:focus { border-color: var(--primary); outline: none; }
-        
-        .curr-arrow {
-            width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.2rem;
-            margin: 0 auto;
-        }
-        .curr-result-display {
-            font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--success);
-            padding: 10px 0; border-bottom: 2px solid transparent; display: block;
-        }
+        .curr-arrow { width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.2rem; margin: 0 auto; }
+        .curr-result-display { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 700; color: var(--success); padding: 10px 0; border-bottom: 2px solid transparent; display: block; }
 
-        /* --- GLOBAL DASHBOARD GRID --- */
+        /* Dashboard */
         .dashboard-section { margin-top: 40px; }
         .dash-title { text-align: left; font-size: 0.85rem; color: var(--text-muted); font-weight: 800; letter-spacing: 1.5px; margin-bottom: 20px; font-family: 'Outfit'; }
-        
         .global-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .mini-card {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-            padding: 20px; border-radius: 16px; text-align: left;
-            display: flex; flex-direction: column; justify-content: space-between;
-            transition: 0.3s; cursor: default;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 16px; text-align: left;
+            display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; cursor: default;
         }
         .mini-card:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); transform: translateY(-3px); }
         .mini-head { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); display: flex; justify-content: space-between; }
@@ -177,51 +158,41 @@
         /* Ads */
         .ad-space { background: rgba(0,0,0,0.1); border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; overflow: hidden; }
 
-        /* --- TOOLS SIDEBAR --- */
+        /* Sidebar */
         .tools-sidebar {
-            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
-            background: var(--panel-bg); backdrop-filter: blur(30px);
-            border-left: 1px solid var(--border); z-index: 2000;
-            padding: 30px; box-shadow: -10px 0 50px rgba(0,0,0,0.5);
-            transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            overflow-y: auto;
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh; background: var(--panel-bg); backdrop-filter: blur(30px);
+            border-left: 1px solid var(--border); z-index: 2000; padding: 30px; box-shadow: -10px 0 50px rgba(0,0,0,0.5); transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1); overflow-y: auto;
         }
         .tools-sidebar.active { right: 0; }
-        
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .panel-title { font-size: 1.5rem; font-weight: 800; font-family: 'Outfit'; color: var(--primary); }
         .close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
-        
         .tool-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .tool-head { font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--accent); }
-        
         .action-btn {
-            width: 100%; padding: 12px; background: var(--primary); color: white;
-            border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
-            margin-top: 10px; transition: 0.2s; font-size: 0.9rem;
+            width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.2s; font-size: 0.9rem;
         }
         .action-btn:hover { background: #4338ca; box-shadow: 0 5px 15px var(--primary-glow); }
-        
         .output-box {
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;
-            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
-            margin-top: 10px; border: 1px solid var(--border); word-break: break-all;
-            white-space: pre-line;
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
+            margin-top: 10px; border: 1px solid var(--border); word-break: break-all; white-space: pre-line;
         }
-
-        .currency-box {
-            background: var(--highlight-bg); border: 1px solid var(--primary);
-            padding: 15px; border-radius: 12px;
-        }
+        .currency-box { background: var(--highlight-bg); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; }
         .curr-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .curr-tag { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); }
 
         .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-            z-index: 1999; opacity: 0; pointer-events: none; transition: 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 1999; opacity: 0; pointer-events: none; transition: 0.3s;
         }
         .overlay.active { opacity: 1; pointer-events: all; }
+
+        /* SEO Footer */
+        .seo-footer {
+            margin-top: 60px; padding: 40px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-radius: 20px;
+            color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; text-align: left;
+        }
+        .seo-footer h2 { font-family: 'Outfit'; font-size: 1.5rem; color: var(--text-main); margin-bottom: 15px; }
+        .copyright { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.8rem; text-align: center; opacity: 0.6; }
 
         @media (max-width: 768px) {
             .container { grid-template-columns: 1fr; }
@@ -240,7 +211,6 @@
         <div class="panel-title">🛠️ TOOLS</div>
         <button class="close-btn" onclick="toggleTools()">×</button>
     </div>
-
     <div class="tool-section">
         <div class="tool-head">📅 Meeting Invite Gen</div>
         <label>Meeting Title</label>
@@ -248,7 +218,6 @@
         <button id="btnInvite" class="action-btn" onclick="generateInvite()">✨ Copy Invite Text</button>
         <div class="output-box" id="inviteOutput" style="display:none;"></div>
     </div>
-
     <div class="tool-section currency-box">
         <div class="tool-head" style="color:var(--text-main); margin-bottom:10px;">💱 Quick Converter</div>
         <div class="curr-row">
@@ -257,7 +226,6 @@
             <div style="text-align:right;"><span class="curr-tag" id="currNameSidebar2">TARGET</span><div id="currResultSidebar" style="margin-top:10px; font-size:1.2rem; font-weight:800; color:var(--success);">0.00</div></div>
         </div>
     </div>
-
     <div class="tool-section" style="border:none;">
         <div class="tool-head">🎨 Widget Customizer</div>
         <label>Theme</label>
@@ -325,10 +293,18 @@
 
             <div class="dashboard-section">
                 <div class="dash-title">GLOBAL COMMAND CENTER</div>
-                <div class="global-dashboard" id="globalGrid">
-                    </div>
+                <div class="global-dashboard" id="globalGrid"></div>
             </div>
 
+            <div class="seo-footer">
+                <h2>About TimeOverlap Pro</h2>
+                <p><strong>TimeOverlap Pro</strong> is the ultimate free online tool for remote teams and digital nomads. Manage <strong>time zone differences</strong> with our visual slider, allowing you to find the perfect meeting overlap between cities like <strong>New York, London, Dubai, and Tokyo</strong> instantly.</p>
+                <p>Unlike standard world clocks, our tool offers a <strong>live currency converter</strong>, a <strong>meeting invite generator</strong> for WhatsApp/Slack, and a customizable widget for your own website.</p>
+                
+                <div class="copyright">
+                    &copy; <span id="currentYear"></span> TimeOverlap Pro. All rights reserved.
+                </div>
+            </div>
         </div>
         <div class="ad-space" style="height: 250px; margin-top: 30px;"><span style="font-family:'JetBrains Mono'">[AdSense Square 250x250]</span></div>
     </main>
@@ -336,7 +312,6 @@
 </div>
 
 <script>
-    // --- DATABASE ---
     const cities = [
         { name: "Algiers", flag: "🇩🇿", offset: 1, curr: "DZD", rate: 134.5 },
         { name: "Riyadh", flag: "🇸🇦", offset: 3, curr: "SAR", rate: 3.75 },
@@ -364,7 +339,6 @@
     ];
 
     const dashboardCities = ["New York", "London", "Berlin", "Dubai", "Tokyo", "Sydney"];
-
     let isLive = true, is24H = false, timer, originIdx = 0, targetIdx = 1;
     const WORK_S = 9, WORK_E = 17;
 
@@ -392,14 +366,15 @@
 
         el.originInp.value = cities[originIdx].name;
         el.targetInp.value = cities[targetIdx].name;
-        
         el.slider.addEventListener('input', () => { isLive = false; el.status.innerText = "● MANUAL MODE"; el.status.style.color = "var(--accent)"; updateUI(); });
         
         goLive();
-        updateAllCurrencyUI(); // Init currency labels
+        updateAllCurrencyUI();
+        
+        // Auto-Set Copyright Year
+        document.getElementById('currentYear').innerText = new Date().getFullYear();
     }
 
-    // --- Core UI Functions ---
     function toggleTheme() {
         const b = document.body; const isDark = b.getAttribute('data-theme') === 'dark';
         b.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -455,7 +430,6 @@
         let ap = h >= 12 ? 'PM' : 'AM'; let hF = is24H ? h.toString().padStart(2, '0') : (h % 12 || 12);
         return { hm: `${hF}:${(m % 60).toString().padStart(2, '0')}`, ap };
     }
-
     function updateDashboard(currentMins, originOffset) {
         el.grid.innerHTML = "";
         dashboardCities.forEach(cityName => {
@@ -472,46 +446,32 @@
             el.grid.appendChild(div);
         });
     }
-
-    // --- CURRENCY LOGIC (Dual Sync) ---
     function updateAllCurrencyUI() {
         const c1 = cities[originIdx], c2 = cities[targetIdx];
-        
-        // Update Main Labels
         document.getElementById('currMainLabel1').innerText = `${c1.curr} (${c1.name})`;
         document.getElementById('currMainLabel2').innerText = `${c2.curr} (${c2.name})`;
-        
-        // Update Sidebar Labels
         document.getElementById('currNameSidebar1').innerText = c1.curr;
         document.getElementById('currNameSidebar2').innerText = c2.curr;
-        
-        // Trigger both calculations
-        convertMainCurrency();
-        convertSidebarCurrency();
+        convertMainCurrency(); convertSidebarCurrency();
     }
-
     function convertMainCurrency() {
         const amt = parseFloat(document.getElementById('currMainAmount').value) || 0;
         const c1 = cities[originIdx], c2 = cities[targetIdx];
         let res = (amt / c1.rate) * c2.rate;
         document.getElementById('currMainResult').innerText = res > 1000 ? res.toFixed(0) : res.toFixed(2);
     }
-
     function convertSidebarCurrency() {
         const amt = parseFloat(document.getElementById('currAmountSidebar').value) || 0;
         const c1 = cities[originIdx], c2 = cities[targetIdx];
         let res = (amt / c1.rate) * c2.rate;
         document.getElementById('currResultSidebar').innerText = res > 1000 ? res.toFixed(0) : res.toFixed(2);
     }
-
-    // --- TOOLS ---
     function toggleTools() { document.getElementById('toolsSidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function generateInvite() {
         const title = document.getElementById('meetTitle').value || "Meeting";
         const c1 = cities[originIdx], c2 = cities[targetIdx];
         let val = parseInt(el.slider.value);
-        let t1 = formatTime(val); 
-        let diff = c2.offset - c1.offset; let val2 = val + (diff * 60);
+        let t1 = formatTime(val); let diff = c2.offset - c1.offset; let val2 = val + (diff * 60);
         while(val2 >= 1440) val2 -= 1440; while(val2 < 0) val2 += 1440;
         let t2 = formatTime(val2);
         const txt = `📅 *${title}*\n⏰ ${c1.name}: ${t1.hm} ${t1.ap}\n⏰ ${c2.name}: ${t2.hm} ${t2.ap}\n🔗 TimeOverlap Pro`;
